@@ -1,6 +1,3 @@
-var mSrc = '';
-var mHtmlTemplate = '';
-
 /*
     Call this function to fill a template with desired data
     template_src : the html source
@@ -27,14 +24,15 @@ function loadTemplate(template_src, data, callbackFunction) {
 
 
 function loadHtml(template_src, callback) {
-    if (mSrc === '' || mSrc !== template_src) {
+    var mSrc = sessionStorage.getItem('src');
+    if (mSrc !== template_src) {
+        sessionStorage.setItem('src', template_src);
         $.ajax({
             url: template_src,
             type: 'GET',
             dataType: 'text',
             success: function (template) {
-                mSrc = template_src;
-                mHtmlTemplate = template;
+                sessionStorage.setItem('html_template', template);
                 callback(template);
             },
             error: function (error) {
@@ -42,6 +40,7 @@ function loadHtml(template_src, callback) {
             }
         });
     } else {
+        var mHtmlTemplate = sessionStorage.getItem('html_template');
         callback(mHtmlTemplate);
     }
 }
